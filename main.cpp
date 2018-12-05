@@ -1,8 +1,12 @@
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
-
 using namespace std;
+
+vector<string> parse (string s) ;
+bool cek (string slist, string s);
+bool isSentenceValid (string s);
+string removePeriod (string s) ;
 
 class word {
     private :
@@ -30,130 +34,104 @@ class word {
             //cout << "\n....Success filling content";
             loc = lok;
             //cout << "\n....Success filling loc";
-            lbl = tipe(s);
+            lbl = stringRec(s);
             //cout << "Current lbl : " << lbl << '\n';
             //cout << "\n....Success filling lbl";
         }
         word (char *s, int lok) {
             content = s;
             loc = lok;
-            lbl = tipe(s);
+            lbl = stringRec(s);
         }
 
-        char tipe (string s) {
-            char label = 'U';
-           // Ganti string ini untuk menambah atau mengurangi kata
-            string sbj[] = {"aku", "kamu" , "dia" , "kami", "mereka"};
-            string pdk[] = {"makan", "minum" , "pergi" , "datang", "mengangkat"};
-            string obj[] = {"nasi", "pintu" , "air" , "payung", "kuliah"};
-            string ket[] = {"di sekolah", "di kamar" , "ke telkom" , "bulan", "nilai"};
+        char stringRec (string s) {
+        //cout << "\nstringRec is runing.....\n";
+        char label = 'U';
+        string sbj[] = {"aku", "kamu" , "dia" , "kami", "mereka"};
+        string pdk[] = {"makan", "minum" , "pergi" , "datang", "mengangkat"};
+        string obj[] = {"nasi", "pintu" , "air" , "payung", "kuliah"};
+        string ket[] = {"di sekolah", "di kamar" , "ke telkom" , "bulan", "nilai"};
+        // for (int i = 0;i < (sizeof(sbj)/sizeof(*sbj)); i++) {
+        //    cout << sbj[i];
+        //}
 
-            // test subject
-            for (int i = 0;i < (sizeof(sbj)/sizeof(*sbj)) ; i++) {
-                //cout << "\n testing is subject";
-                int sizeofs = s.size();
-                int sizeofit = sbj[i].size();
-                if (sizeofit == sizeofs) {
-                    for (int j = 0; i < sbj[i].size(); i++) {
-                        if (sbj[i][j] != s[j]) {
-                            break;
-                        }
-                        lbl = 'S';
-                    //cout << "Subject identified as " << s << "\n";
-                    return 'S';
-                    }
+
+        if (s == "") {
+            //cout << "/nS is empty";
+            return 'U';
+        } else {
+            // cout << "Something is running\n";
+            //cout << sbj[0] ;
+            for (int i = 0; i < (sizeof(sbj)/sizeof(*sbj)); i++) {
+                if (cek(sbj[i],s)) {
+                    label =  'S';
+                    break;
                 }
             }
-
-            //test predikat
-            for (int i = 0;i < (sizeof(pdk)/sizeof(*pdk)) ; i++) {
-                //cout << "\n testing is predikat";
-                int sizeofs = s.size();
-                int sizeofit = pdk[i].size();
-                if (sizeofit == sizeofs) {
-                    for (int j = 0; i < pdk[i].size(); i++) {
-                        if (pdk[i][j] != s[j]) {
-                            break;
-                        }
-                        lbl = 'P';
-                    //cout << "Predikat identified as " << s << "\n";
-                    return 'P';
-                    }
+            for (int i = 0; i < (sizeof(pdk)/sizeof(*pdk)); i++) {
+                if (cek(pdk[i],s)) {
+                    label =  'P';
+                    break;
                 }
             }
-
-            //test object
-            for (int i = 0;i < (sizeof(obj)/sizeof(*obj)) ; i++) {
-                //cout << "\n testing is Object";
-                int sizeofs = s.size();
-                int sizeofit = obj[i].size();
-                if (sizeofit == sizeofs) {
-                    for (int j = 0; i < obj[i].size(); i++) {
-                        //cout << "screening object : " << obj[i];
-                        if (obj[i][j] != s[j]) {
-                            break;
-                        }
-                        lbl = 'O';
-                    //cout << "Object identified as " << s << "\n";
-                    return 'O';
-                    }
+            for (int i = 0; i < (sizeof(obj)/sizeof(*obj)); i++) {
+                if (cek(obj[i],s)) {
+                    label =  'O';
+                    break;
                 }
             }
-
-            //test keterangan
-            for (int i = 0;i < (sizeof(ket)/sizeof(*ket)) ; i++) {
-                //cout << "\n testing is Keterangan";
-                int sizeofs = s.size();
-                int sizeofit = ket[i].size();
-                if (sizeofit == sizeofs) {
-                    for (int j = 0; i < ket[i].size(); i++) {
-                        if (ket[i][j] != s[j]) {
-                            break;
-                        }
-                    //cout << "Keterangan identified as " << s << "\n";
-                    lbl = 'K';
-                    return 'K';
-                    }
+            for (int i = 0; i < (sizeof(ket)/sizeof(*ket)); i++) {
+                if (cek(ket[i],s)) {
+                    label =  'K';
+                    break;
                 }
             }
-            return label;
         }
+        return label;
+    }
 
 };
 
+int main () {
+    while (true) {
+        system("cls");
+        cout << "Subject    : {\"aku\", \"kamu\" , \"dia\" , \"kami\", \"mereka\"} \n";
+        cout << "Predikat   : {\"makan\", \"minum\" , \"pergi\" , \"datang\", \"mengangkat\"}\n";
+        cout << "Object     : {\"nasi\", \"pintu\" , \"air\" , \"payung\", \"kuliah\"}\n";
+        cout << "Keterangan : {\"di sekolah\", \"di kamar\" , \"ke telkom\" , \"bulan\", \"nilai\"}\n";
 
-bool isSenteceLegal (string s) {
-    string legal[] = {"SP" , "SPO", "SPK", "SPOK"};
-    if (s != "") {
-        int sizeofs = s.size();
-        bool isLegal = false;
-        for (int i = 0; i < (sizeof(legal)/sizeof(*legal)); i++) {
-            if (s[i] != 'U') {
-                bool temp = true;
-                if (sizeofs == legal[i].size()) {
-                    for (int j = 0; j < sizeofs ; j++) {
-                        if (legal[i][j] == 'U') {
-                            temp = temp && false;
-                        } else if (legal[i][j] == s[j]) {
-                            temp = temp && true;
-                        }
-                    }
-                } else {
-                    temp = false;
-                }
-            isLegal = isLegal || temp;
-            //cout << "isLegal  : " << isLegal ;
-
-            } else {
-                return false;
-            }
+        cout << "\nKata : ";
+        string s;
+        getline(cin,s);
+        vector<string> stringVector = parse(removePeriod(s));
+        word listw[stringVector.size()];
+        int now = 0;
+        //int limit = listword.size();
+        string sentenceStruct = "";
+        for (vector<string>::iterator it = stringVector.begin();
+            it != stringVector.end(); it++) {
+            //cout << *it << '\n';
+            string stop = *it;
+            listw[now] = word(stop,now);
+            sentenceStruct = sentenceStruct + listw[now].getLbl();
+            //cout << "\n\tintializer success";
+            now ++;
         }
-    return isLegal;
-    } else {
-        return false;
+        cout << "Stucture Kalimat : " << sentenceStruct << '\n';
+        if (isSentenceValid(sentenceStruct)) {
+            cout << "Kalimat ini valid...\n";
+        } else {
+            cout << "Kalimat ini tidak valid...\n";
+        }
+        //cout << sentenceStruct << '\n';
+       // cout << '\n' << s ;
+       // cout << "\n" << stringRec(s) << '\n';
+        system("pause");
     }
-    return false;
+    return 0;
 }
+
+
 
 
 vector<string> parse (string s) {
@@ -177,7 +155,38 @@ vector<string> parse (string s) {
    // cout << '\t' <<temp << " the  rest \n";
     res.push_back(temp);
     return res;
+}
+
+bool cek (string slist, string s) {
+    bool isInArray = false;
+    string tempString = slist;
+    if (s.size() != tempString.size()) {
+
+    } else {
+        vector<char> kc;
+        vector<char> sc;
+        for (int i = 0; i < tempString.size();i++) {
+            kc.push_back(tempString[i]);
+            sc.push_back (s[i]);
+        }
+        bool isEqual = true;
+        for (int h = 0; h < kc.size(); h++) {
+            isEqual = isEqual && (kc[h] == sc[h]);
+        }
+        isInArray = isInArray || isEqual;
     }
+    return isInArray;
+}
+
+
+bool isSentenceValid (string s) {
+    string legal[] = {"SP" , "SPO", "SPK", "SPOK"};
+    bool valid = false;
+    for (int i = 0 ; i < 4; i++) {
+        valid = valid || (cek(legal[i],s));
+    }
+    return valid;
+}
 
 string removePeriod (string s) {
     //cout << "last character : " << s[s.size()-1] << '\n';
@@ -199,61 +208,3 @@ string removePeriod (string s) {
     }
 
 }
-
-
-
-
-  int main() {
-        while (true) {
-            cout << "Subject    : {\"aku\", \"kamu\" , \"dia\" , \"kami\", \"mereka\"} \n";
-            cout << "Predikat   : {\"makan\", \"minum\" , \"pergi\" , \"datang\", \"mengangkat\"}\n";
-            cout << "Object     : {\"nasi\", \"pintu\" , \"air\" , \"payung\", \"kuliah\"}\n";
-            cout << "Keterangan : {\"di sekolah\", \"di kamar\" , \"ke telkom\" , \"bulan\", \"nilai\"}\n";
-            cout << "Masukan kata : ";
-            string str;
-            getline(cin,str);
-            str = removePeriod(str);
-            //cout << "After cleaning  : " << str << "\n";
-            vector<string> listword = parse(str);
-            word listw[listword.size()];
-            int now = 0;
-            //int limit = listword.size();
-            for (vector<string>::iterator it = listword.begin();
-                it != listword.end(); it++) {
-                //cout << *it << '\n';
-                string stop = *it;
-                listw[now] = word(stop,now);
-                //cout << "\n\tintializer success";
-                now ++;
-            }
-            //string yy = listw[0].getContent();
-            //cout << yy << "sadasd \n";
-
-
-            string sentStruct = "";
-            //cout << sentStruct << "\n\n\n\n\n\n\n";
-            for (int i = 0 ; i < listword.size(); i++) {
-                //for (int i = 0; i < sentStruct.size() ; i++) {
-                sentStruct += listw[i].getLbl();
-               // cout << "content " << i << " " << listw[i].getContent()<<"\n";
-               // cout << "label " << i << " " << listw[i].getLbl()<<"\n";
-               // cout << "loc " << i << " " << listw[i].getLoc()<<"\n";
-            //}
-            }
-            cout << "Struct is "<<sentStruct << "\n";
-            //sentStruct = "SPOK";
-            if (isSenteceLegal(sentStruct)) {
-                cout << "Kalimat ini valid...\n";
-            } else {
-                cout << "Kalimat tidak valid ...\n";
-            }
-            system("pause");
-            system("cls");
-        }
-
-
-    return 0;
-}
-//SP----SPO-----SPK-------SPOK
-
-
