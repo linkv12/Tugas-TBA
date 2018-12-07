@@ -50,7 +50,7 @@ class word {
         string sbj[] = {"aku", "kamu" , "dia" , "kami", "mereka"};
         string pdk[] = {"makan", "minum" , "pergi" , "datang", "mengangkat"};
         string obj[] = {"nasi", "pintu" , "air" , "payung", "kuliah"};
-        string ket[] = {"di sekolah", "di kamar" , "ke telkom" , "bulan", "nilai"};
+        string ket[] = {"disekolah", "dikamar" , "ketelkom" , "bulan", "nilai"};
         // for (int i = 0;i < (sizeof(sbj)/sizeof(*sbj)); i++) {
         //    cout << sbj[i];
         //}
@@ -98,7 +98,7 @@ int main () {
         cout << "Subject    : {\"aku\", \"kamu\" , \"dia\" , \"kami\", \"mereka\"} \n";
         cout << "Predikat   : {\"makan\", \"minum\" , \"pergi\" , \"datang\", \"mengangkat\"}\n";
         cout << "Object     : {\"nasi\", \"pintu\" , \"air\" , \"payung\", \"kuliah\"}\n";
-        cout << "Keterangan : {\"di sekolah\", \"di kamar\" , \"ke telkom\" , \"bulan\", \"nilai\"}\n";
+        cout << "Keterangan : {\"disekolah\", \"dikamar\" , \"ketelkom\" , \"bulan\", \"nilai\"}\n";
 
         cout << "\nKata : ";
         string s;
